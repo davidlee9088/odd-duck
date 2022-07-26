@@ -7,17 +7,17 @@
 
 // // // GLOBAL VARIABLES
 let myContainer = document.querySelector('section');
-let myButton = document.querySelector('section + div');
-let ul = document.querySelector('ul');
+
 
 let image1 = document.querySelector('section img:first-child');
 let image2 = document.querySelector('section img:nth-child(2)');
 let image3 = document.querySelector('section img:nth-child(3)');
 
 let allProducts = [];
+let indexArray = [];
 let clicks = 0;
 
-let clickAllowed = 3;
+let clickAllowed = 1;
 
 
 // // CONSTRUCTOR
@@ -37,20 +37,15 @@ function getRandomProduct() {
 }
 
 function renderProducts() {
-  let products1 = getRandomProduct();
-  let products2 = getRandomProduct();
-  let products3 = getRandomProduct();
-  console.log(products1,products2,products3);
-  // seriously consider using an array here
-  // remember how do you know if an array includes something?
-  // Google it and find out
-  while (products1 === products2 || products1 === products3 || products2 === products3)
-  {
-    products1 = getRandomProduct();
-    products2 = getRandomProduct();
-    products3 = getRandomProduct();
-    console.log(products1, products2,products3);
+  while (indexArray.length < 6) {
+    let ranNum = getRandomProduct();
+    if (!indexArray.includes(ranNum)) {
+      indexArray.push(ranNum);
+    }
   }
+  let products1 = indexArray.shift();
+  let products2 = indexArray.shift();
+  let products3 = indexArray.shift();
 
   image1.src = allProducts[products1].src;
   image1.alt = allProducts[products1].name;
@@ -59,7 +54,8 @@ function renderProducts() {
   image2.alt = allProducts[products2].name;
   allProducts[products2].views++;
   image3.src = allProducts[products3].src;
-  image3.alt = allProducts[products3].src;
+  image3.alt = allProducts[products3].name;
+  allProducts[products3].views++;
 
   console.log(allProducts);
 }
@@ -72,7 +68,7 @@ function handleProductClick(event) {
   let clickedProducts = event.target.alt;
   console.log(clickedProducts);
 
-  for (let i = 0; i< allProducts.length; i++) {
+  for (let i = 0; i < allProducts.length; i++) {
     if (clickedProducts === allProducts[i].name) {
       allProducts[i].clicks++;
       break;
@@ -80,28 +76,14 @@ function handleProductClick(event) {
   }
   renderProducts();
   if (clicks === clickAllowed) {
-    myButton.className = 'clicks-allowed';
+
     myContainer.removeEventListener('click', handleProductClick);
-    myButton.addEventListener('click', handleButtonClick);
+    renderChart();
+    console.log('hi');
   }
 }
 
-function handleButtonClick() {
-  if (clicks === clickAllowed) {
-    renderResults();
-  }
-}
 
-function renderResults() {
-
-  // for each  goat in my array, generate a LI
-  // ex: name had X views and was clicked on X times
-  for (let i = 0; i < allProducts.length; i++) {
-    let li = document.createElement('li');
-    li.textContent = `${allProducts[i].name} had ${allProducts[i].views} views and was clicked on ${allProducts[i].clicks} times`;
-    ul.appendChild(li);
-  }
-}
 
 // // // EXCUTABLE CODE
 
@@ -120,21 +102,72 @@ let i3 = new Products('i3');
 let i4 = new Products('i4');
 let i5 = new Products('i5');
 let i6 = new Products('i6');
-let i7 = new Products('i7','png');
+let i7 = new Products('i7', 'png');
 let i8 = new Products('i8');
 let i9 = new Products('i9');
 let i10 = new Products('i10');
 let i11 = new Products('i11');
 
-
-
-
-allProducts.push(this);
-
-console.log(allProducts);
 renderProducts();
 
 myContainer.addEventListener('click', handleProductClick);
 
-//how to not repeat imgs
-// how to add allProducts Line without hardcoding.
+// chart.js
+
+function renderChart() {
+
+  let productNames = [];
+  let productViews = [];
+  let productClicks = [];
+  for (let i = 0; i < allProducts.length; i++) {
+    productNames.push(allProducts[i].name);
+    productViews.push(allProducts[i].views);
+    productClicks.push(allProducts[i].clicks);
+  }
+
+
+  const data = {
+    labels: productNames,
+    datasets: [
+      {
+        label: 'Views',
+        data: productViews,
+        backgroundColor: [
+          'rgba(50, 56, 205, .69)'
+        ],
+        borderColor: [
+          'rgb(201, 203, 207)'
+        ],
+        borderWidth: 1
+      },
+      {
+        label: 'Votes',
+        data: productClicks,
+        backgroundColor: [
+          'rgba(57, 119, 192, 0.69)'
+        ],
+        borderColor: [
+          'rgb(192, 130, 57, .69)',
+        ],
+        borderWidth: 1
+      }
+    ]
+  };
+
+  const config = {
+    type: 'bar',
+    data: data,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    },
+  };
+
+  const myChart = new Chart(
+    document.getElementById('myChart'),
+    config
+  );
+}
