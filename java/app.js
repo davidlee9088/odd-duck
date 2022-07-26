@@ -1,11 +1,11 @@
-'use strict';
+// 'use strict';
 
 
 
 
 
 
-// // GLOBAL VARIABLES
+// // // GLOBAL VARIABLES
 let myContainer = document.querySelector('section');
 let myButton = document.querySelector('section + div');
 let ul = document.querySelector('ul');
@@ -27,9 +27,10 @@ function Products(name, fileExtension = 'jpg') {
   this.src = `../assets/${this.name}.${fileExtension}`;
   this.clicks = 0;
   this.views = 0;
+  allProducts.push(this);
 }
 
-// // FUNCTIONS
+// // // FUNCTIONS
 
 function getRandomProduct() {
   return Math.floor(Math.random() * allProducts.length);
@@ -39,14 +40,16 @@ function renderProducts() {
   let products1 = getRandomProduct();
   let products2 = getRandomProduct();
   let products3 = getRandomProduct();
-  console.log(products1,products2);
+  console.log(products1,products2,products3);
   // seriously consider using an array here
   // remember how do you know if an array includes something?
   // Google it and find out
-  while (products1.name === products2.name ||products1.name === products3.name || products2.name === products3.name) {
+  while (products1 === products2 || products1 === products3 || products2 === products3)
+  {
     products1 = getRandomProduct();
     products2 = getRandomProduct();
-    console.log(products1, products2);
+    products3 = getRandomProduct();
+    console.log(products1, products2,products3);
   }
 
   image1.src = allProducts[products1].src;
@@ -61,46 +64,46 @@ function renderProducts() {
   console.log(allProducts);
 }
 
-// function handleGoatClick(event) {
-//   if (event.target === myContainer) {
-//     alert('Please click on an image');
-//   }
-//   clicks++;
-//   let clickedGoat = event.target.alt;
-//   console.log(clickedGoat);
+function handleProductClick(event) {
+  if (event.target === myContainer) {
+    alert('Please click on an image');
+  }
+  clicks++;
+  let clickedProducts = event.target.alt;
+  console.log(clickedProducts);
 
-//   for (let i = 0; i< allGoats.length; i++) {
-//     if (clickedGoat === allGoats[i].name) {
-//       allGoats[i].clicks++;
-//       break;
-//     }
-//   }
-//   renderGoats();
-//   if (clicks === clickAllowed) {
-//     myButton.className = 'clicks-allowed';
-//     myContainer.removeEventListener('click', handleGoatClick);
-//     myButton.addEventListener('click', handleButtonClick);
-//   }
-// }
+  for (let i = 0; i< allProducts.length; i++) {
+    if (clickedProducts === allProducts[i].name) {
+      allProducts[i].clicks++;
+      break;
+    }
+  }
+  renderProducts();
+  if (clicks === clickAllowed) {
+    myButton.className = 'clicks-allowed';
+    myContainer.removeEventListener('click', handleProductClick);
+    myButton.addEventListener('click', handleButtonClick);
+  }
+}
 
-// function handleButtonClick() {
-//   // if (clicks === clickAllowed) {
-//     renderResults();
-//   // }
-// }
+function handleButtonClick() {
+  if (clicks === clickAllowed) {
+    renderResults();
+  }
+}
 
-// function renderResults() {
+function renderResults() {
 
-//   // for each  goat in my array, generate a LI
-//   // ex: name had X views and was clicked on X times
-//   for (let i = 0; i < allGoats.length; i++) {
-//     let li = document.createElement('li');
-//     li.textContent = `${allGoats[i].name} had ${allGoats[i].views} views and was clicked on ${allGoats[i].clicks} times`;
-//     ul.appendChild(li);
-//   }
-// }
+  // for each  goat in my array, generate a LI
+  // ex: name had X views and was clicked on X times
+  for (let i = 0; i < allProducts.length; i++) {
+    let li = document.createElement('li');
+    li.textContent = `${allProducts[i].name} had ${allProducts[i].views} views and was clicked on ${allProducts[i].clicks} times`;
+    ul.appendChild(li);
+  }
+}
 
-// // EXCUTABLE CODE
+// // // EXCUTABLE CODE
 
 
 let bag = new Products('bag');
@@ -109,12 +112,29 @@ let bathroom = new Products('bathroom');
 let boots = new Products('boots');
 let breakfast = new Products('breakfast');
 let bubblegum = new Products('bubblegum');
+let chair = new Products('chair');
+let cthulhu = new Products('cthulhu');
+let i1 = new Products('i1');
+let i2 = new Products('i2');
+let i3 = new Products('i3');
+let i4 = new Products('i4');
+let i5 = new Products('i5');
+let i6 = new Products('i6');
+let i7 = new Products('i7','png');
+let i8 = new Products('i8');
+let i9 = new Products('i9');
+let i10 = new Products('i10');
+let i11 = new Products('i11');
 
 
 
-allProducts.push(bag, banana, bathroom, boots, breakfast, bubblegum);
+
+allProducts.push(this);
 
 console.log(allProducts);
 renderProducts();
 
-// myContainer.addEventListener('click', handleGoatClick);
+myContainer.addEventListener('click', handleProductClick);
+
+//how to not repeat imgs
+// how to add allProducts Line without hardcoding.
