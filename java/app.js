@@ -1,4 +1,4 @@
-// 'use strict';
+'use strict';
 
 
 
@@ -17,7 +17,7 @@ let allProducts = [];
 let indexArray = [];
 let clicks = 0;
 
-let clickAllowed = 1;
+let clickAllowed = 15;
 
 
 // // CONSTRUCTOR
@@ -66,7 +66,6 @@ function handleProductClick(event) {
   }
   clicks++;
   let clickedProducts = event.target.alt;
-  console.log(clickedProducts);
 
   for (let i = 0; i < allProducts.length; i++) {
     if (clickedProducts === allProducts[i].name) {
@@ -79,11 +78,40 @@ function handleProductClick(event) {
 
     myContainer.removeEventListener('click', handleProductClick);
     renderChart();
-    console.log('hi');
+  }
+  storeProduct();
+}
+
+function storeProduct() {
+  console.log(allProducts);
+  let stringfiedProducts = JSON.stringify(allProducts);
+  console.log(stringfiedProducts);
+  localStorage.setItem('productOrders', stringfiedProducts);
+}
+
+function getProducts() {
+  // let potentialProducts = localStorage.getItem('productOrders');
+  if (localStorage.productOrders) {
+    // let parseOrders = JSON.parse(localStorage.allProducts);
+    allProducts = JSON.parse(localStorage.getItem('productOrders'));
+    for (let productOrders of allProducts) {
+      console.log(productOrders);
+      let name = productOrders.name;
+      let src = productOrders.src;
+      let clicks = productOrders.clicks;
+      let views = productOrders.views;
+      // console.log('made it here');
+
+    }
   }
 }
 
 
+// function Products(name, fileExtension = 'jpg') {
+//   this.name = name;
+//   this.src = `../assets/${this.name}.${fileExtension}`;
+//   this.clicks = 0;
+//   this.views = 0;
 
 // // // EXCUTABLE CODE
 
@@ -109,8 +137,10 @@ let i10 = new Products('i10');
 let i11 = new Products('i11');
 
 renderProducts();
+getProducts();
 
 myContainer.addEventListener('click', handleProductClick);
+
 
 // chart.js
 
@@ -119,10 +149,14 @@ function renderChart() {
   let productNames = [];
   let productViews = [];
   let productClicks = [];
+  // let productTotalViews = [];
+  // let productTotalClicks = [];
   for (let i = 0; i < allProducts.length; i++) {
     productNames.push(allProducts[i].name);
     productViews.push(allProducts[i].views);
     productClicks.push(allProducts[i].clicks);
+    // productTotalViews.push(this.productOrders.views);
+    // productTotalClicks.push(this.productOrders.clicks);
   }
 
 
@@ -151,6 +185,28 @@ function renderChart() {
         ],
         borderWidth: 1
       }
+      // {
+      //   label: 'TotalViews',
+      //   data: productViews,
+      //   backgroundColor: [
+      //     'rgba(50, 56, 205, .69)'
+      //   ],
+      //   borderColor: [
+      //     'rgb(201, 203, 207)'
+      //   ],
+      //   borderWidth: 1
+      // },
+      // {
+      //   label: 'TotalVotes',
+      //   data: productClicks,
+      //   backgroundColor: [
+      //     'rgba(57, 119, 192, 0.69)'
+      //   ],
+      //   borderColor: [
+      //     'rgb(192, 130, 57, .69)',
+      //   ],
+      //   borderWidth: 1
+      // }
     ]
   };
 
