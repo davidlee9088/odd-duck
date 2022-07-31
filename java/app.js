@@ -24,7 +24,7 @@ let clickAllowed = 15;
 
 function Products(name, fileExtension = 'jpg') {
   this.name = name;
-  this.src = `../assets/${this.name}.${fileExtension}`;
+  this.src = `assets/${this.name}.${fileExtension}`;
   this.clicks = 0;
   this.views = 0;
   allProducts.push(this);
